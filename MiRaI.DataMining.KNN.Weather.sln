@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiRaI.DataMining.KNN.ShowWindow", "MiRaI.DataMining.KNN.ShowWindow\MiRaI.DataMining.KNN.ShowWindow.csproj", "{4265FD7A-BD8F-417E-A7C6-2649AB1253A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiRaI.DataMining.KNN.Weather", "MiRaI.DataMining.KNN.Weather\MiRaI.DataMining.KNN.Weather.csproj", "{E74918DE-F291-4C83-A6BA-4F188F66227E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "数据处理", "数据处理\数据处理.csproj", "{FAE60BA3-5D38-4FDD-9C41-97FE9C67ED09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4265FD7A-BD8F-417E-A7C6-2649AB1253A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4265FD7A-BD8F-417E-A7C6-2649AB1253A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4265FD7A-BD8F-417E-A7C6-2649AB1253A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4265FD7A-BD8F-417E-A7C6-2649AB1253A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E74918DE-F291-4C83-A6BA-4F188F66227E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E74918DE-F291-4C83-A6BA-4F188F66227E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E74918DE-F291-4C83-A6BA-4F188F66227E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E74918DE-F291-4C83-A6BA-4F188F66227E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAE60BA3-5D38-4FDD-9C41-97FE9C67ED09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAE60BA3-5D38-4FDD-9C41-97FE9C67ED09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAE60BA3-5D38-4FDD-9C41-97FE9C67ED09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAE60BA3-5D38-4FDD-9C41-97FE9C67ED09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB6BC8CB-246A-4898-B851-82307950533B}
+	EndGlobalSection
+EndGlobal

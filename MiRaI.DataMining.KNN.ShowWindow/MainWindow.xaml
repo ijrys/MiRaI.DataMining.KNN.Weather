@@ -1,0 +1,392 @@
+﻿<Window x:Class="MiRaI.DataMining.KNN.ShowWindow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MiRaI.DataMining.KNN.ShowWindow"
+		xmlns:MCon="clr-namespace:MiRaI.DataMining.KNN.ShowWindow.TestNS"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+	<Window.Resources>
+		<ResourceDictionary>
+			<SolidColorBrush x:Key="BrushBackGround" Color="#222"/>
+			<SolidColorBrush x:Key="BrushContentBackGround" Color="#111"/>
+			<SolidColorBrush x:Key="BrushForeGround" Color="#CCC"/>
+			<SolidColorBrush x:Key="BrushBorder" Color="#36C"/>
+			<SolidColorBrush x:Key="BrushMouseOverBackground" Color="#444"/>
+			<SolidColorBrush x:Key="BrushMouseOverForeGround" Color="#DDD"/>
+			<SolidColorBrush x:Key="BrushSelectBackground" Color="#555"/>
+			<SolidColorBrush x:Key="BrushSelectForeGround" Color="#EEE"/>
+
+
+			<Style x:Key="DefaultListViewItem" TargetType="{x:Type ListViewItem}">
+				<Setter Property="Foreground" Value="{StaticResource BrushForeGround}" />
+				<Setter Property="Background" Value="#111"/>
+				<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+				<Setter Property="VerticalContentAlignment" Value="Center" />
+				<Setter Property="MinHeight" Value="25" />
+				<Setter Property="Margin" Value="0" />
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="Padding" Value="3,0,0,0"></Setter>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type ListViewItem}">
+							<Border x:Name="Bd" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" Margin="{TemplateBinding Margin}">
+								<Grid x:Name="PART_Root" Margin="{TemplateBinding Padding}">
+									<GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+									<ContentPresenter x:Name="contentPresenter" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="Collapsed" />
+								</Grid>
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
+									<Setter TargetName="contentPresenter" Property="Visibility" Value="Visible" />
+								</Trigger>
+								<Trigger Property="IsSelected" Value="true">
+									<Setter Property="Background" Value="{StaticResource BrushSelectBackground}" />
+									<Setter Property="Foreground" Value="{StaticResource BrushSelectForeGround}" />
+								</Trigger>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter Property="Background" Value="{StaticResource BrushMouseOverBackground}" />
+									<Setter Property="Foreground" Value="{StaticResource BrushMouseOverForeGround}" />
+								</Trigger>
+								<Trigger Property="ItemsControl.AlternationIndex" Value="1">
+									<Setter Property="Background" Value="#222" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+			<Style x:Key="GridViewColumnHeaderGripper" TargetType="Thumb">
+				<Setter Property="Width" Value="18" />
+				<Setter Property="Background" Value="#EEE" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Thumb}">
+							<Border Padding="{TemplateBinding Padding}" Background="Transparent" Margin="0 0 0 2">
+								<Rectangle Width="1" Fill="{TemplateBinding Background}" HorizontalAlignment="Center" />
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<Style x:Key="DefaultGridViewColumnHeader" TargetType="GridViewColumnHeader">
+				<Setter Property="Foreground" Value="{StaticResource BrushForeGround}" />
+				<Setter Property="Background" Value="{StaticResource BrushBackGround}"/>
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="HorizontalContentAlignment" Value="Left" />
+				<Setter Property="VerticalContentAlignment" Value="Center" />
+				<Setter Property="Padding" Value="4 2 4 2" />
+				<Setter Property="MinHeight" Value="26"/>
+				<Setter Property="Height" Value="30"/>
+				<Setter Property="BorderThickness" Value="0,0,0,2" />
+				<Setter Property="BorderBrush" Value="{StaticResource BrushBorder}" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="GridViewColumnHeader">
+							<Grid>
+								<Rectangle Fill="Transparent" IsHitTestVisible="True" />
+								<Border x:Name="HeaderBorder" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+									<ContentPresenter x:Name="HeaderContent" Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" Margin="5,1,5,1"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+								</Border>
+								<Thumb x:Name="PART_HeaderGripper" HorizontalAlignment="Right" Margin="0,0,-9,0" Style="{StaticResource GridViewColumnHeaderGripper}" />
+							</Grid>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsPressed" Value="true">
+									<Setter TargetName="HeaderContent" Property="Margin" Value="6,1,6,1" />
+								</Trigger>
+								<Trigger Property="IsEnabled" Value="false">
+									<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+				<Setter Property="ContentTemplate">
+					<Setter.Value>
+						<DataTemplate>
+							<TextBlock TextBlock.FontWeight="SemiBold" Text="{Binding}" />
+						</DataTemplate>
+					</Setter.Value>
+				</Setter>
+				<Style.Triggers>
+					<!--Floating 的 Role 值标识当前是拖放操作的对象的列-->
+					<Trigger Property="Role" Value="Floating">
+						<Setter Property="Opacity" Value="0.7" />
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="GridViewColumnHeader">
+									<Canvas Name="PART_FloatingHeaderCanvas">
+										<Rectangle Fill="#60000000" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}" />
+									</Canvas>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+			<Style x:Key="FocusVisual">
+				<Setter Property="Control.Template">
+					<Setter.Value>
+						<ControlTemplate>
+							<Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+			<SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+			<SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+			<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+			<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+			<SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+			<SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+			<SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+			<SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+			<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+			<Style x:Key="ButtonStyleBase" TargetType="{x:Type Button}">
+				<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+				<Setter Property="Background" Value="{StaticResource BrushBackGround}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Foreground" Value="{StaticResource BrushForeGround}"/>
+				<Setter Property="BorderThickness" Value="0"/>
+				<Setter Property="HorizontalContentAlignment" Value="Center"/>
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="Padding" Value="1"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+								<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsDefaulted" Value="true">
+									<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+								</Trigger>
+								<Trigger Property="IsMouseOver" Value="true">
+									<Setter Property="Background" Value="{StaticResource BrushMouseOverBackground}"/>
+								</Trigger>
+								<Trigger Property="IsPressed" Value="true">
+									<Setter Property="Background" Value="{StaticResource BrushSelectBackground}"/>
+								</Trigger>
+								<Trigger Property="IsEnabled" Value="false">
+									<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+									<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+									<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<Style TargetType="GridSplitter">
+				<Setter Property="Background" Value="{StaticResource BrushBorder}"/>
+			</Style>
+
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid Background="#222">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="48px" MinWidth="48px" MaxWidth="144px"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="1*" MinWidth="96px"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="1*" MinWidth="96px"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="5*"/>
+		</Grid.ColumnDefinitions>
+		<GridSplitter Grid.Column="1" Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+		<GridSplitter Grid.Column="3" Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+		<GridSplitter Grid.Column="5" Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+
+
+		<StackPanel>
+			<Button Click="Button_Click"
+				Width="144px" Height="48px"
+				FontSize="16px"
+				BorderBrush="#999"
+				BorderThickness="1"
+				Style="{StaticResource ButtonStyleBase}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="48px"/>
+						<ColumnDefinition Width="96px"/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Width="48px" Background="#030" TextAlignment="Center">\|/</TextBlock>
+					<TextBlock Grid.Column="1" Background="#300" Width="96px" TextAlignment="Center">加载数据</TextBlock>
+				</Grid>
+			</Button>
+
+			<Button Click="BtnAddTest_Click"
+				Width="144px" Height="48px"
+				FontSize="16px"
+				BorderBrush="#999"
+				BorderThickness="1"
+				Style="{StaticResource ButtonStyleBase}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="48px"/>
+						<ColumnDefinition Width="96px"/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Width="48px" Background="#030" TextAlignment="Center" Text="=="/>
+					<TextBlock Grid.Column="1" Background="#300" Width="96px" TextAlignment="Center">加载测试数据</TextBlock>
+				</Grid>
+			</Button>
+		</StackPanel>
+
+		<Grid Grid.Column="2">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="48px"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+			<Button Style="{StaticResource ButtonStyleBase}" Content="全部数据" Click="btnShowAll_Click"/>
+			<ListBox x:Name="listBoxTest" Grid.Row="1" Background="#111" Foreground="#CCC"
+					 SelectionMode="Single" SelectionChanged="listBoxTest_SelectionChanged">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid Height="36px">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="36px"/>
+								<ColumnDefinition Width="1*"/>
+							</Grid.ColumnDefinitions>
+							<Image Source="{Binding StateImage}"/>
+							<TextBlock Grid.Column="1" Text="{Binding TestString}" FontSize="16px" VerticalAlignment="Center"/>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Grid>
+
+		<ListView x:Name="DataList_Default"
+				  Grid.Column="4"
+				  Background="#111"
+				  Foreground="#CCC"
+				  ItemContainerStyle="{StaticResource DefaultListViewItem}"
+				  SelectionChanged="DataList_Default_SelectionChanged">
+
+			<ListView.View>
+				<GridView ColumnHeaderContainerStyle="{StaticResource DefaultGridViewColumnHeader}">
+					<GridView.Columns>
+						<GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date,StringFormat={}{0:yyyy-MM-dd}}">
+						</GridViewColumn>
+						<GridViewColumn Header="Temp[°C]" DisplayMemberBinding="{Binding Temp}">
+						</GridViewColumn>
+						<GridViewColumn Header="Humidity[%]" DisplayMemberBinding="{Binding Humidity}">
+						</GridViewColumn>
+						<GridViewColumn Header="Sea Level Press[hPa]" DisplayMemberBinding="{Binding Slp}">
+						</GridViewColumn>
+						<GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}">
+						</GridViewColumn>
+					</GridView.Columns>
+				</GridView>
+
+			</ListView.View>
+		</ListView>
+		<Grid x:Name="gridTestShow" Grid.Column="4" Background="{StaticResource BrushContentBackGround}" Visibility="Hidden">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="128px"/>
+				<!--<RowDefinition Height="auto"/>-->
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="96px"/>
+			</Grid.RowDefinitions>
+
+			<!--<GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4px"/>-->
+			<GridSplitter Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="4px"/>
+
+			<Grid x:Name="gridTestPanel">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="4*"/>
+					<RowDefinition Height="2*"/>
+					<RowDefinition Height="3*"/>
+					<RowDefinition Height="2*"/>
+					<RowDefinition Height="3*"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.Resources>
+					<ResourceDictionary>
+						<Style TargetType="RadioButton">
+							<Setter Property="Foreground" Value="{StaticResource BrushForeGround}"/>
+							<Setter Property="HorizontalAlignment" Value="Left"/>
+							<Setter Property="VerticalAlignment" Value="Center"/>
+						</Style>
+						<Style TargetType="TextBlock">
+							<Setter Property="Foreground" Value="{StaticResource BrushForeGround}"/>
+						</Style>
+						<Style TargetType="Slider">
+							<Setter Property="Foreground" Value="{StaticResource BrushForeGround}"/>
+						</Style>
+					</ResourceDictionary>
+				</Grid.Resources>
+				<Button Grid.ColumnSpan="2" x:Name="btnReDo" Style="{StaticResource ButtonStyleBase}" Content="重测"/>
+				<RadioButton Grid.Row="1" x:Name="radioK" Content="By K" Click="radioK_Click"/>
+				<TextBlock Grid.Row="1" Grid.Column="1"
+						   VerticalAlignment="Center" HorizontalAlignment="Right"
+						   Text="{Binding ElementName=sliderK, Path=Value}"></TextBlock>
+				<Slider Grid.Row="2" Grid.ColumnSpan="2" x:Name="sliderK" Minimum="1" Maximum="32" TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+						ValueChanged="sliderK_ValueChanged" Interval="5000"/>
+				<RadioButton Grid.Row="3" x:Name="radioDis" Content="Dist"
+							 Click="radioDis_Click"/>
+				<TextBlock Grid.Row="3" Grid.Column="1"
+						   VerticalAlignment="Center" HorizontalAlignment="Right"
+						   Text="{Binding ElementName=sliderDis, Path=Value,StringFormat={}{0:0.000}}"></TextBlock>
+				<Slider Grid.Row="4" Grid.ColumnSpan="2" x:Name="sliderDis" Minimum="0" Maximum="1" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="False"
+						ValueChanged="sliderDis_ValueChanged"/>
+			</Grid>
+			<ListView x:Name="dataList_Test"
+				  Grid.Row="1"
+				  Background="#111"
+				  Foreground="#CCC"
+				  ItemContainerStyle="{StaticResource DefaultListViewItem}"
+				  SelectionChanged="DataList_Test_SelectionChanged">
+				<ListView.View>
+					<GridView ColumnHeaderContainerStyle="{StaticResource DefaultGridViewColumnHeader}">
+						<GridView.Columns>
+							<GridViewColumn Header="Distance" DisplayMemberBinding="{Binding TheDistance, StringFormat={}{0:0.000}}"/>
+							<GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date,StringFormat={}{0:yyyy-MM-dd}}"/>
+							<GridViewColumn Header="Temp[°C]" DisplayMemberBinding="{Binding Temp}"/>
+							<GridViewColumn Header="Humidity[%]" DisplayMemberBinding="{Binding Humidity}"/>
+							<GridViewColumn Header="Sea Level Press[hPa]" DisplayMemberBinding="{Binding Slp}"/>
+							<GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}"/>
+						</GridView.Columns>
+					</GridView>
+				</ListView.View>
+			</ListView>
+
+			<TextBox x:Name="txtResault" Grid.Row="3" IsReadOnly="True"
+					 Background="{StaticResource BrushBackGround}" Foreground="{StaticResource BrushForeGround}"/>
+		</Grid>
+		<Grid x:Name="gridNeedDo" Grid.Column="4" Background="{StaticResource BrushContentBackGround}" Visibility="Hidden">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="48px"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+			<Button Grid.Row="1" Content="开始测试" Style="{StaticResource ButtonStyleBase}" Click="btnDoFun_Click"/>
+		</Grid>
+
+		<Grid Grid.Column="6">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="4*"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="1*" MinHeight="8"/>
+			</Grid.RowDefinitions>
+			<ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+				<Canvas x:Name="canvShow" Width="768" Height="768" Background="#000"/>
+			</ScrollViewer>
+			<GridSplitter Grid.Row="1" Height="4px" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+			<TextBlock Grid.Row="2" x:Name="txtDetils" Foreground="{StaticResource BrushForeGround}"/>
+		</Grid>
+
+		<!--<Image x:Name="dddd" Source="/imgs/error.png"/>-->
+	</Grid>
+</Window>
